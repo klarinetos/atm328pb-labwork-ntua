@@ -1,0 +1,86 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "xc8-cc: compile main.c",
+            "type": "shell",
+            "command": "\"C:\\Program Files\\Microchip\\xc8\\v3.10\\bin\\xc8-cc.exe\"",
+            "args": [
+                "-mcpu=ATmega328PB",
+                "-x", "c",
+                "-mdfp=\"C:\\Users\\sgkio\\.mchp_packs\\Microchip\\ATmega_DFP\\3.6.299\\xc8\"",
+                "-O1",
+                "-ffunction-sections",
+                "-fdata-sections",
+                "-fshort-enums",
+                "-funsigned-char",
+                "-funsigned-bitfields",
+                "-Wall",
+                "-Wno-error",
+                "-gdwarf-3",
+                "-mno-const-data-in-progmem",
+                "\"${workspaceFolder}\\main.c\"",
+                "-o", "\"${workspaceFolder}\\out\\main.elf\""
+            ],
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared",
+                "clear": true
+            },
+            "problemMatcher": {
+                "owner": "xc8-cc",
+                "fileLocation": ["absolute"],
+                "pattern": {
+                    "regexp": "^(.*):(\\d+):(\\d+): (warning|error): (.*)$",
+                    "file": 1,
+                    "line": 2,
+                    "column": 3,
+                    "severity": 4,
+                    "message": 5
+                }
+            }
+        },
+        {
+            "label": "avr-objcopy: build main.hex",
+            "type": "shell",
+            "command": "\"C:\\Program Files\\Microchip\\xc8\\v3.10\\bin\\avr-objcopy.exe\"",
+            "args": [
+                "-O", "ihex",
+                "\"${workspaceFolder}\\out\\main.elf\"",
+                "\"${workspaceFolder}\\out\\main.hex\""
+            ],
+            "dependsOn": ["xc8-cc: compile main.c"],
+            "dependsOrder": "sequence",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared",
+                "clear": true
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "ipecmd: flash to ATmega328PB Xplained Mini",
+            "type": "shell",
+            "command": "\"C:\\Program Files\\Microchip\\MPLABX\\v6.35\\mplab_platform\\mplab_ipe\\ipecmd.exe\"",
+            "args": [
+                "-PATmega328PB",
+                "-TPMEDBG",
+                "-F\"${workspaceFolder}\\out\\main.hex\"",
+                "-M",
+                "-YP"
+            ],
+            "dependsOn": ["avr-objcopy: build main.hex"],
+            "group": "test",
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared",
+                "clear": true
+            },
+            "problemMatcher": []
+        }
+    ]
+}

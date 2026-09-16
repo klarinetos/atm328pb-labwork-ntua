@@ -1,0 +1,11 @@
+# Lab reports — kept local, not pushed
+**/Report.pdf
+
+# Build artifacts (regenerate with `make` or the VS Code build task)
+out/
+
+# Leftover MPLAB X project state, in case the extension regenerates it
+# (see CLAUDE.md) — none of this is meant to be tracked
+/cmake/
+/_build/
+MPLABXLog.xml
