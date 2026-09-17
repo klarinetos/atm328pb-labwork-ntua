@@ -19,6 +19,7 @@ driver.
 | `two-lines.c` | The minimal version of the same idea, static text only: row 1, jump to row 2 (`lcd_command(0xC0)`), row 2 — each line horizontally centered, showing how to combine the row jump with a column offset. |
 | `adc-voltage-disp.c` | Reads ADC2, prints it as a centered `"D.DD V"` voltage reading once a second — adapted from `lib/examples/4.2.c`, with the ADC-scaling and centering math spelled out in comments since it's meant to be read, not just run. |
 | `cube3d.c` | Just for fun: a rotating 3D wireframe cube. Real vertex rotation (fixed-point sin/cos lookup table, animated spin plus a fixed axonometric camera tilt) and orthographic projection, rasterized into a 20x16 pixel virtual framebuffer built from all 8 CGRAM custom-character slots tiled in a 4x2 block, re-uploaded every frame — the character LCD equivalent of software rendering. |
+| `signed-counter.c` | A signed counter on row 1: PB0 decrements, PB1 increments (polled, like the other demos), PB2 resets it to zero via a genuine hardware interrupt — a Pin Change Interrupt (`PCINT0_vect`/`PCINT2`), since PD2/PD3 (this chip's only INT0/INT1 pins) are both already tied up as the LCD's RS/E lines. |
 
 ## Building
 
