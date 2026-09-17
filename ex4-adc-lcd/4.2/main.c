@@ -2,6 +2,7 @@
 #include<avr/io.h>
 #include<util/delay.h>
 
+void enable_pulse(void);
 
 void write_2_nibbles(unsigned char data){
 

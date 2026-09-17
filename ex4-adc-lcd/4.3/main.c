@@ -3,6 +3,8 @@
 #include<util/delay.h>
 #include<avr/interrupt.h>
 
+void enable_pulse(void);
+
 void write_2_nibbles(unsigned char data){
 
 unsigned char previous, next;
