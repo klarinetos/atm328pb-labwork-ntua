@@ -123,7 +123,7 @@ time. Winget adds it to your user PATH automatically as part of the
 install; restart any open terminal/VS Code window afterward for that to
 take effect. Confirm with `make --version`.
 
-(The Makefiles' own tool paths — `avrasm2`, `xc8-cc`, `ipecmd`, `rm`, etc. —
+(The Makefiles' own tool paths — `avrasm2`, `xc8-cc`, `avrdude`, `rm`, etc. —
 are all absolute, so nothing else needs to be on PATH.)
 
 Every project's `Makefile` pins `SHELL` to `cmd.exe` explicitly, so `make`
@@ -136,41 +136,55 @@ The board is an **ATmega328PB Xplained Mini** — it has an onboard debugger
 (mini-EDBG chip) built in, so a single USB cable is all you need; no
 separate programmer.
 
-Run `make load`, or the VS Code task **"ipecmd: flash to ATmega328PB
+Run `make load`, or the VS Code task **"avrdude: flash to ATmega328PB
 Xplained Mini"** — either rebuilds first automatically, then runs
 (equivalent command line, from inside a project folder):
+
+```
+avrdude -c xplainedmini_isp -p m328pb -U flash:w:out\main.hex:i
+```
+
+`avrdude` (installed via `winget install AVRDudes.AVRDUDE` — a native
+binary with no PATH entry needed since the Makefiles/tasks call it by
+absolute path) talks to the same onboard mEDBG debugger MPLAB IPE does,
+just without MPLAB IPE's several-seconds-per-invocation JVM/tool-pack
+startup: a full `make load` (build + flash + verify) runs in well under
+5 seconds, versus 20-30s through `ipecmd`. `xplainedmini_isp` is the
+programmer type for this exact board (the Xplained Mini's onboard debugger
+in ISP mode); `m328pb` is avrdude's part name for the ATmega328PB.
+
+Success ends with `avrdude done. Thank you.` after a "bytes of flash
+verified" line, exit code 0.
+
+If flashing reports it can't find the programmer/device, reconnect the USB
+cable and retry — Windows sometimes enumerates the board's composite USB
+interfaces (a COM port + an HID device) before the Microchip tool layer has
+attached to them.
+
+## Slower alternatives (MPLAB IPE / ipecmd)
+
+`ipecmd.exe` (bundled with MPLAB X — no separate install) does the same
+job, just much slower per invocation (JVM + tool-pack startup each time):
 
 ```
 "C:\Program Files\Microchip\MPLABX\v6.35\mplab_platform\mplab_ipe\ipecmd.exe" ^
   -PATmega328PB -TPMEDBG -F"out\main.hex" -M -YP
 ```
 
-Key gotcha: the board's onboard debugger identifies to `ipecmd` as
-**`MEDBG`** (`-TPMEDBG`), *not* `EDBG` — that's specific to the Xplained
-Mini's mini-EDBG chip. Other tool IDs (`EDBG`, `NEDBG`, `PKOB4`, ...) come
-back "Programmer not found."
-
-Success ends with `Program Succeeded` / `Verify Succeeded` / `Operation
-Succeeded`, exit code 0.
-
-**Note:** `-YP` verifies program memory only. A full verify (`-Y` with no
-region) will report a mismatch in configuration/fuse memory — that's
-expected and harmless: none of these `.hex` files touch fuses, so a full
-verify compares fuses against nothing. The board's fuses are left exactly
-as they were.
-
-If flashing reports "Programmer not found," reconnect the USB cable and
-retry — Windows sometimes enumerates the board's composite USB interfaces
-(a COM port + an HID device) before the Microchip tool layer has attached to
-them.
-
-## GUI alternative
+Key gotcha if you ever do use it: the board's onboard debugger identifies
+to `ipecmd` as **`MEDBG`** (`-TPMEDBG`), *not* `EDBG` — that's specific to
+the Xplained Mini's mini-EDBG chip. Other tool IDs (`EDBG`, `NEDBG`,
+`PKOB4`, ...) come back "Programmer not found." Success ends with `Program
+Succeeded` / `Verify Succeeded` / `Operation Succeeded`. Its `-YP` verifies
+program memory only — a full verify (`-Y` with no region) reports a
+mismatch in configuration/fuse memory, which is expected and harmless:
+none of these `.hex` files touch fuses, so a full verify compares fuses
+against nothing.
 
 MPLAB IPE (`C:\Program Files\Microchip\MPLABX\v6.35\mplab_platform\bin\mplab_ipe64.exe`)
-does the same thing as the `ipecmd` task, with a GUI: pick Device
-`ATmega328PB`, Tool = whatever shows in the dropdown once the board is
-plugged in (this will be the MEDBG entry), browse to a project's
-`out\main.hex`, click Program.
+is the GUI version of the same tool: pick Device `ATmega328PB`, Tool =
+whatever shows in the dropdown once the board is plugged in (the MEDBG
+entry), browse to a project's `out\main.hex`, click Program.
 
 ## Adding a new exercise / sub-project
 

@@ -41,7 +41,7 @@ Each project folder has two equivalent ways to build/flash it:
 
 - **VS Code**: open that specific subfolder (not the repo root), then
   `Ctrl+Shift+B` builds it, and Terminal → Run Task →
-  **"ipecmd: flash to ATmega328PB Xplained Mini"** flashes it.
+  **"avrdude: flash to ATmega328PB Xplained Mini"** flashes it.
 - **Command line**: `make` builds it, `make load` builds then flashes it,
   `make clean` removes build output. (One-time setup needed first — see
   CLAUDE.md.)
