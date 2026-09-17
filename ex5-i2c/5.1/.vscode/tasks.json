@@ -2,13 +2,14 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "xc8-cc: compile main.c",
+            "label": "avr-gcc: compile main.c",
             "type": "shell",
-            "command": "\"C:\\Program Files\\Microchip\\xc8\\v3.10\\bin\\xc8-cc.exe\"",
+            "command": "\"C:\\Program Files (x86)\\Microchip\\xc8\\v2.10\\avr\\bin\\avr-gcc.exe\"",
             "args": [
-                "-mcpu=ATmega328PB",
-                "-x", "c",
-                "-mdfp=\"C:\\Users\\sgkio\\.mchp_packs\\Microchip\\ATmega_DFP\\3.6.299\\xc8\"",
+                "-mmcu=atmega328pb",
+                "-D__AVR_DEV_LIB_NAME__=m328pb",
+                "-I\"C:\\Program Files (x86)\\Microchip\\xc8\\v2.10\\dfp\\include\"",
+                "-B\"C:\\Program Files (x86)\\Microchip\\xc8\\v2.10\\dfp\\gcc\\dev\\atmega328pb\\avr5\"",
                 "-O1",
                 "-ffunction-sections",
                 "-fdata-sections",
@@ -28,7 +29,7 @@
                 "clear": true
             },
             "problemMatcher": {
-                "owner": "xc8-cc",
+                "owner": "avr-gcc",
                 "fileLocation": ["absolute"],
                 "pattern": {
                     "regexp": "^(.*):(\\d+):(\\d+): (warning|error): (.*)$",
@@ -43,13 +44,13 @@
         {
             "label": "avr-objcopy: build main.hex",
             "type": "shell",
-            "command": "\"C:\\Program Files\\Microchip\\xc8\\v3.10\\bin\\avr-objcopy.exe\"",
+            "command": "\"C:\\Program Files (x86)\\Microchip\\xc8\\v2.10\\avr\\bin\\avr-objcopy.exe\"",
             "args": [
                 "-O", "ihex",
                 "\"${workspaceFolder}\\out\\main.elf\"",
                 "\"${workspaceFolder}\\out\\main.hex\""
             ],
-            "dependsOn": ["xc8-cc: compile main.c"],
+            "dependsOn": ["avr-gcc: compile main.c"],
             "dependsOrder": "sequence",
             "group": {
                 "kind": "build",

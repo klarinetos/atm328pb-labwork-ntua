@@ -8,13 +8,12 @@
 SHELL       := C:/Windows/System32/cmd.exe
 .SHELLFLAGS := /C
 
-XC8CC       := C:/Program Files/Microchip/xc8/v3.10/bin/xc8-cc.exe
-OBJCOPY     := C:/Program Files/Microchip/xc8/v3.10/bin/avr-objcopy.exe
-DFP         := C:/Users/sgkio/.mchp_packs/Microchip/ATmega_DFP/3.6.299/xc8
+AVRGCC      := C:/Program Files (x86)/Microchip/xc8/v2.10/avr/bin/avr-gcc.exe
+OBJCOPY     := C:/Program Files (x86)/Microchip/xc8/v2.10/avr/bin/avr-objcopy.exe
+V210DFP     := C:/Program Files (x86)/Microchip/xc8/v2.10/dfp
 AVRDUDE     := C:/Users/sgkio/AppData/Local/Microsoft/WinGet/Packages/AVRDudes.AVRDUDE_Microsoft.Winget.Source_8wekyb3d8bbwe/avrdude.exe
-RM          := C:/Program Files/Microchip/MPLABX/v6.35/gnuBins/GnuWin32/bin/rm.exe
 
-CFLAGS := -mcpu=ATmega328PB -x c -mdfp="$(DFP)" -O1 -ffunction-sections -fdata-sections -fshort-enums -funsigned-char -funsigned-bitfields -Wall -Wextra -Wno-error -gdwarf-3 -mno-const-data-in-progmem
+CFLAGS := -mmcu=atmega328pb -D__AVR_DEV_LIB_NAME__=m328pb "-I$(V210DFP)/include" "-B$(V210DFP)/gcc/dev/atmega328pb/avr5" -O1 -ffunction-sections -fdata-sections -fshort-enums -funsigned-char -funsigned-bitfields -Wall -Wextra -Wno-error -gdwarf-3 -mno-const-data-in-progmem
 
 OUT := out
 
@@ -40,7 +39,7 @@ else
 endif
 
 $(OUT)/%.elf: %.c ../ntuaboard.c ../ntuaboard.h
-	"$(XC8CC)" $(CFLAGS) $(EX).c ../ntuaboard.c -o "$@"
+	"$(AVRGCC)" $(CFLAGS) $(EX).c ../ntuaboard.c -o "$@"
 
 $(OUT)/%.hex: $(OUT)/%.elf
 	"$(OBJCOPY)" -O ihex "$<" "$@"
@@ -50,9 +49,9 @@ load: build
 
 clean:
 ifndef EX
-	-"$(RM)" -f "$(OUT)"/*.elf "$(OUT)"/*.hex
+	-del /f /q $(subst /,\,$(OUT))\*.elf $(subst /,\,$(OUT))\*.hex >nul 2>&1
 else
-	-"$(RM)" -f "$(ELF)" "$(HEX)"
+	-del /f /q $(subst /,\,$(ELF) $(HEX)) >nul 2>&1
 endif
 
 list:
