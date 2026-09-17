@@ -219,7 +219,13 @@ void lcd_data(uint8_t data) {
 void lcd_command(uint8_t command) {
     PORTD &= ~(1 << LCD_RS);
     write_2_nibbles(command);
-    _delay_us(250);
+    /* The datasheet says ~39us is enough for most commands, but this
+     * board's actual LCD hardware needs more than that in practice (also
+     * noted in ex4-instructions.pdf) -- confirmed on hardware: 250us
+     * wasn't enough specifically for "set DDRAM address" (e.g. jumping
+     * to row 2, 0xC0), even though every other command used by lcd_init()
+     * happened to work fine at 250us anyway. */
+    _delay_ms(5);
 }
 
 void lcd_clear_display(void) {
