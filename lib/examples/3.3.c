@@ -12,6 +12,10 @@ int main(void) {
     pwm1_init();
     adc_init(0);
     DDRD = 0x00; /* mode-select + duty buttons are all on PORTD here */
+    DDRB = 0xFF; /* pwm1_init() only sets PB1 (the PWM pin) as output --
+                  * drive the rest of PORTB low too, or its other LEDs
+                  * float and light up from noise. */
+    PORTB = 0x00;
 
     uint8_t dc_value = 6;
     uint8_t mode = 1;

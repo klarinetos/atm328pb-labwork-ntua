@@ -12,8 +12,12 @@ int main(void) {
     pwm1_init();
     adc_init(0);
 
-    DDRB &= (uint8_t) ~((1 << PB4) | (1 << PB5)); /* buttons as input */
-    DDRD = 0xFF;                                   /* bargraph as output */
+    DDRB = 0b001111; /* PB0-PB3 output (PB1 is the PWM pin; PB0,PB2,PB3
+                       * unused, driven low so their LEDs don't float),
+                       * PB4/PB5 input (buttons) -- pwm1_init() alone only
+                       * sets up PB1 */
+    PORTB = 0x00;
+    DDRD = 0xFF; /* bargraph as output */
 
     uint8_t x = 6; /* start at ~50% duty */
     pwm1_set_duty(duty_table[x]);
