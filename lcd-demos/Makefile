@@ -54,4 +54,4 @@ else
 endif
 
 list:
-	@echo typewriter typewriter-1row scrolling-text counter two-lines adc-voltage-disp
+	@echo typewriter typewriter-1row scrolling-text counter two-lines adc-voltage-disp cube3d
