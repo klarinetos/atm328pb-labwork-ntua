@@ -39,6 +39,7 @@ typedef enum {
 #define TW_STATUS_MASK  0b11111000
 #define TW_STATUS (TWSR0 & TW_STATUS_MASK)
 
+void enable_pulse(void);
 
 void write_2_nibbles(unsigned char data){
 
