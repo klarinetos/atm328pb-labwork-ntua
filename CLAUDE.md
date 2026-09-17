@@ -180,3 +180,31 @@ for assembly, any `.c` one for C) as a template — neither its
 both is relative to the project folder itself. Just drop in the new
 `main.asm`/`main.c` and either open that folder in VS Code or run `make`
 from inside it.
+
+## `lib/` — shared board driver library
+
+`lib/ntuaboard.h` + `lib/ntuaboard.c` consolidate the C driver functions
+that recur across Ex5–Ex8 (TWI, the PCA9555 expander, the keypad, the LCD,
+the DS18B20, USART/ESP) plus an ADC and Timer1-PWM layer that wasn't
+handed out as named functions anywhere but every exercise sets up the same
+way by hand — all under the same function names those exercises already
+use, so it's a drop-in for new C projects rather than another dialect to
+learn. It compiles clean with `-Wall -Wextra` and was link-tested against
+a program that calls every function in it.
+
+It isn't wired into any existing project's build (each project's
+`Makefile`/`tasks.json` still only points at that project's own
+`main.c`/`main.asm`) — to use it in a new project, add `lib/ntuaboard.c`
+as a second source file to compile and `-I` the `lib/` directory, then
+`#include "ntuaboard.h"`.
+
+One deliberate difference from the Ex8 original: `usart_receive_str` here
+takes a caller-supplied buffer and returns it, rather than the original's
+no-argument version that returned a pointer to its own local stack array
+— undefined behavior the moment the function returns. `usart_command`'s
+signature changed to match.
+
+`lib/examples/` has every C exercise that actually touches one of these
+peripherals, rewritten to use this library instead of its own copy of the
+driver code — see `lib/examples/README.md` for the full list and
+`make EX=<name>` / `make EX=<name> load` to build/flash one.
