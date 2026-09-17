@@ -11,7 +11,7 @@ SHELL       := C:/Windows/System32/cmd.exe
 AVRGCC      := C:/Program Files (x86)/Microchip/xc8/v2.10/avr/bin/avr-gcc.exe
 OBJCOPY     := C:/Program Files (x86)/Microchip/xc8/v2.10/avr/bin/avr-objcopy.exe
 V210DFP     := C:/Program Files (x86)/Microchip/xc8/v2.10/dfp
-AVRDUDE     := C:/Users/sgkio/AppData/Local/Microsoft/WinGet/Packages/AVRDudes.AVRDUDE_Microsoft.Winget.Source_8wekyb3d8bbwe/avrdude.exe
+AVRDUDE     := avrdude
 
 CFLAGS := -mmcu=atmega328pb -D__AVR_DEV_LIB_NAME__=m328pb "-I$(V210DFP)/include" "-B$(V210DFP)/gcc/dev/atmega328pb/avr5" -O1 -ffunction-sections -fdata-sections -fshort-enums -funsigned-char -funsigned-bitfields -Wall -Wextra -Wno-error -gdwarf-3 -mno-const-data-in-progmem
 

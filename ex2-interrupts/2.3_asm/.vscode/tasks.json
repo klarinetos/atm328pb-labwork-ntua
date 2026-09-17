@@ -37,7 +37,7 @@
         {
             "label": "avrdude: flash to ATmega328PB Xplained Mini",
             "type": "shell",
-            "command": "\"C:\\Users\\sgkio\\AppData\\Local\\Microsoft\\WinGet\\Packages\\AVRDudes.AVRDUDE_Microsoft.Winget.Source_8wekyb3d8bbwe\\avrdude.exe\"",
+            "command": "avrdude",
             "args": [
                 "-c", "xplainedmini_isp",
                 "-p", "m328pb",

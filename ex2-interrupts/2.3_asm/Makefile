@@ -7,7 +7,7 @@ SHELL       := C:/Windows/System32/cmd.exe
 
 AVRASM2     := C:/Program Files (x86)/Microchip/xc8/v2.10/avr/bin/avrasm2.exe
 AVRASM2_INC := C:/Program Files (x86)/Microchip/xc8/v2.10/dfp/avrasm/inc
-AVRDUDE     := C:/Users/sgkio/AppData/Local/Microsoft/WinGet/Packages/AVRDudes.AVRDUDE_Microsoft.Winget.Source_8wekyb3d8bbwe/avrdude.exe
+AVRDUDE     := avrdude
 
 OUT := out
 HEX := $(OUT)/main.hex

@@ -145,11 +145,16 @@ time. Winget adds it to your user PATH automatically as part of the
 install; restart any open terminal/VS Code window afterward for that to
 take effect. Confirm with `make --version`.
 
-(The Makefiles' own tool paths — `avrasm2`, `avr-gcc`, `avr-objcopy`,
-`avrdude`, etc. — are all absolute, so nothing else needs to be on PATH.
-`clean` uses `del`, cmd.exe's own built-in, rather than an external `rm` —
-one less thing to install, and one less MPLAB-installed file this repo
-leans on.)
+(The Makefiles' own compiler/assembler paths — `avrasm2`, `avr-gcc`,
+`avr-objcopy` — are absolute, pinned to XC8 v2.10's install location, so
+that part doesn't depend on PATH. `avrdude` is the one tool the Makefiles
+call bare (just `avrdude`, no path) — its `winget install` location embeds
+your Windows username in a hashed per-package folder, which isn't
+something to hardcode into a file other people clone, so it relies on the
+PATH entry winget already set up instead, same as `make` itself. `clean`
+uses `del`, cmd.exe's own built-in, rather than an external `rm` — one
+less thing to install, and one less MPLAB-installed file this repo leans
+on.)
 
 Every project's `Makefile` pins `SHELL` to `cmd.exe` explicitly, so `make`
 behaves identically whether you run it from PowerShell, cmd, or Git Bash —
@@ -169,9 +174,10 @@ Xplained Mini"** — either rebuilds first automatically, then runs
 avrdude -c xplainedmini_isp -p m328pb -U flash:w:out\main.hex:i
 ```
 
-`avrdude` (installed via `winget install AVRDudes.AVRDUDE` — a native
-binary with no PATH entry needed since the Makefiles/tasks call it by
-absolute path) talks to the same onboard mEDBG debugger MPLAB IPE does,
+`avrdude` (installed via `winget install AVRDudes.AVRDUDE`, and — unlike
+every other tool here — actually needs to be on PATH, since that's how
+both the Makefiles and the VS Code tasks call it) talks to the same
+onboard mEDBG debugger MPLAB IPE does,
 just without MPLAB IPE's several-seconds-per-invocation JVM/tool-pack
 startup: a full `make load` (build + flash + verify) runs in well under
 5 seconds, versus 20-30s through `ipecmd`. `xplainedmini_isp` is the
