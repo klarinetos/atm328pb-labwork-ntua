@@ -17,6 +17,7 @@ driver.
 | `scrolling-text.c` | A message longer than 16 columns, scrolled into view with the controller's own "shift display" command (`lcd_command(0x18)`/`0x1C`) rather than rewriting characters. No buttons — just watch it. |
 | `counter.c` | A static label on row 1, a live incrementing counter on row 2 — shows explicit cursor positioning via `lcd_command(0x80 \| address)` instead of relying on `lcd_string()`/auto-increment alone. |
 | `two-lines.c` | The minimal version of the same idea, static text only: row 1, jump to row 2 (`lcd_command(0xC0)`), row 2 — each line horizontally centered, showing how to combine the row jump with a column offset. |
+| `adc-voltage-disp.c` | Reads ADC2, prints it as a centered `"D.DD V"` voltage reading once a second — adapted from `lib/examples/4.2.c`, with the ADC-scaling and centering math spelled out in comments since it's meant to be read, not just run. |
 
 ## Building
 
