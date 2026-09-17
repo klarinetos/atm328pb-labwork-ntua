@@ -7,6 +7,9 @@
  * buttons, no re-writing characters, just watch it scroll. */
 
 int main(void) {
+    DDRD |= (1 << PD2) | (1 << PD3) | 0xF0; /* LCD control + data lines --
+                                              * lcd_init() doesn't set this
+                                              * itself, see ntuaboard.h */
     lcd_init();
     lcd_clear_display();
 

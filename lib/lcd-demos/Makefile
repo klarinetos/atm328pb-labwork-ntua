@@ -54,4 +54,4 @@ else
 endif
 
 list:
-	@echo typewriter scrolling-text counter
+	@echo typewriter scrolling-text counter two-lines

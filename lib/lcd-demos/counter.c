@@ -7,6 +7,9 @@
  * address) rather than relying on auto-increment/lcd_string() alone. */
 
 int main(void) {
+    DDRD |= (1 << PD2) | (1 << PD3) | 0xF0; /* LCD control + data lines --
+                                              * lcd_init() doesn't set this
+                                              * itself, see ntuaboard.h */
     lcd_init();
     lcd_clear_display();
     lcd_string((const unsigned char *) "Uptime x100ms:");

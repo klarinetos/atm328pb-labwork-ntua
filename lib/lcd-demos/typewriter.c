@@ -15,6 +15,9 @@ int main(void) {
     PCA9555_0_write(REG_CONFIGURATION_1, 0xF0); /* keypad rows/cols on IO1 */
     DDRB &= (uint8_t) ~(1 << PB0); /* PB0 as input... */
     PORTB |= (1 << PB0);           /* ...with its pull-up enabled */
+    DDRD |= (1 << PD2) | (1 << PD3) | 0xF0; /* LCD control + data lines --
+                                              * lcd_init() doesn't set this
+                                              * itself, see ntuaboard.h */
     lcd_init();
 
     uint8_t pos = 0;
