@@ -37,8 +37,8 @@ else
 	$(MAKE) "$(HEX)"
 endif
 
-$(OUT)/%.elf: %.c ../ntuaboard.c ../ntuaboard.h
-	"$(AVRGCC)" $(CFLAGS) $(EX).c ../ntuaboard.c -o "$@"
+$(OUT)/%.elf: %.c ntuaboard.c ntuaboard.h
+	"$(AVRGCC)" $(CFLAGS) $(EX).c ntuaboard.c -o "$@"
 
 $(OUT)/%.hex: $(OUT)/%.elf
 	"$(OBJCOPY)" -O ihex "$<" "$@"

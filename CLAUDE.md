@@ -253,3 +253,25 @@ signature changed to match.
 peripherals, rewritten to use this library instead of its own copy of the
 driver code — see `lib/examples/README.md` for the full list and
 `make EX=<name>` / `make EX=<name> load` to build/flash one.
+
+## `lcd-demos/` — standalone LCD examples
+
+A top-level folder (like `exN-*/`, not nested under `lib/`) of small demos
+showing off the LCD API — not tied to any lab exercise. Unlike
+`lib/examples/`, it's fully self-contained: `lcd-demos/ntuaboard.h` and
+`.c` are **copies** of `lib/ntuaboard.h`/`.c`, not references to `lib/` —
+on purpose, so this folder has no dependency on anything outside itself.
+That means a fix made to one copy (e.g. the `lcd_command()` timing fix
+below) doesn't automatically apply to the other; check both if you touch
+the LCD driver in either place. Same `make EX=<name>` / `make EX=<name>
+load` interface as `lib/examples/`; see `lcd-demos/README.md` for what
+each demo does.
+
+One real hardware quirk worth knowing if you extend either copy of the
+LCD driver: `lcd_command()`'s post-command delay needs to be **at least
+~5ms**, not the ~39µs-250µs that's normally enough per the HD44780
+datasheet — confirmed on this board's actual hardware specifically for
+"set DDRAM address" (jumping to row 2, `0xC0`), which silently failed at
+250µs even though every other command (`lcd_init()`'s 0x28/0x0C/0x06/0x01)
+happened to work fine at that speed anyway. `ex4-instructions.pdf` flags
+this same "needs longer delays than the datasheet" behavior independently.

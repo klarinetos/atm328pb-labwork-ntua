@@ -1,7 +1,14 @@
-# lib/lcd-demos
+# lcd-demos
 
 Small standalone demos showing off different pieces of the LCD API in
-`../ntuaboard.h` — not tied to any specific lab exercise, just examples.
+`ntuaboard.h` — not tied to any specific lab exercise, just examples.
+
+This folder is fully self-contained: `ntuaboard.h`/`ntuaboard.c` here are
+copies of `../lib/ntuaboard.h`/`.c`, not a reference to `lib/` — on
+purpose, so this folder doesn't depend on anything outside itself. That
+does mean a fix made in one copy (like the `lcd_command()` timing fix)
+doesn't automatically apply to the other; check both if you touch the LCD
+driver.
 
 | Demo | What it shows |
 |---|---|

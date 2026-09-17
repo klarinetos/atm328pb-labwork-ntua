@@ -1,5 +1,5 @@
 #define F_CPU 16000000UL
-#include "../ntuaboard.h"
+#include "ntuaboard.h"
 #include <stdio.h>
 
 /* Two-line counter: a static label on row 1, a live incrementing count

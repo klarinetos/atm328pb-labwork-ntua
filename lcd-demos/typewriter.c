@@ -1,5 +1,5 @@
 #define F_CPU 16000000UL
-#include "../ntuaboard.h"
+#include "ntuaboard.h"
 
 /* Typewriter: press keys on the 4x4 keypad to fill the 2x16 LCD
  * left-to-right, top row then bottom row, one character per key press.

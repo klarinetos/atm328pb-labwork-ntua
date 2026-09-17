@@ -1,5 +1,5 @@
 #define F_CPU 16000000UL
-#include "../ntuaboard.h"
+#include "ntuaboard.h"
 
 /* Typewriter (single row): the simpler version of typewriter.c -- fills
  * only row 1, ignores further key presses once it's full (16 characters),

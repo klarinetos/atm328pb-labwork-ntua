@@ -71,6 +71,9 @@ ex8-final-project/
   ex8-instructions.pdf
   Report.pdf
   8.1/ 8.2/ 8.3/  main.c
+
+lib/             (shared driver library used by the exercises above + worked examples)
+lcd-demos/       (standalone LCD demos, not tied to any exercise)
 ```
 
 Each sub-exercise folder is a **self-contained project**: open it directly

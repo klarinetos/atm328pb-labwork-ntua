@@ -1,5 +1,5 @@
 #define F_CPU 16000000UL
-#include "../ntuaboard.h"
+#include "ntuaboard.h"
 #include <string.h>
 
 /* Two lines: reference for addressing both rows of the 2x16 LCD. Static

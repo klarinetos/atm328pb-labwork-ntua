@@ -1,5 +1,5 @@
 #define F_CPU 16000000UL
-#include "../ntuaboard.h"
+#include "ntuaboard.h"
 
 /* Scrolling text: writes a message longer than the visible 16 columns
  * into row 1's DDRAM, then slides the display window back and forth
