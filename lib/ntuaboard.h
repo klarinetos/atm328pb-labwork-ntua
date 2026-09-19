@@ -133,7 +133,14 @@ void lcd_clear_display(void);
 void lcd_string(const unsigned char *str);
 
 /* ======================================================================
- * DS18B20/DS1820 temperature sensor — 1-Wire on PD4, per Ex7.
+ * DS18B20/DS1820 temperature sensor — 1-Wire on PB1.
+ *
+ * Ex7's original wiring uses PD4, but that pin doubles as one of the
+ * LCD's 4-bit data lines here, which corrupts LCD output the moment a
+ * program uses both peripherals together (as lib/examples/7.2.c and
+ * 8.2.c/8.3.c do) -- this library's DS18B20 driver uses PB1 instead,
+ * which isn't shared with anything else. Wire the sensor's data line
+ * to PB1, not PD4, when using this library's therm_* functions.
  * ====================================================================== */
 
 /* Returns 1 if a device responded to reset, 0 if the line is empty. */
@@ -201,6 +208,11 @@ void usart_transmit_str(const unsigned char *str);
 /* Reads characters into buffer (up to maxlen-1 of them) until a '\n' is
  * seen; null-terminates in place of it. Returns buffer, so this can be
  * used inline (e.g. lcd_string(usart_receive_str(buf, sizeof buf))).
+ *
+ * Times out after ~3s of silence and returns an empty string (buffer[0]
+ * == '\0') instead of blocking forever -- a real reply is never empty,
+ * so callers can treat that as "nothing answered" (unplugged/unpowered
+ * device, wrong wiring, etc).
  *
  * Note: earlier per-exercise versions of this function (Ex8) took no
  * arguments and returned a pointer to a local stack array, which is

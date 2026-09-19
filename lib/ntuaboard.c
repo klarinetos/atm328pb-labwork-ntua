@@ -263,13 +263,21 @@ void lcd_string(const unsigned char *str) {
 }
 
 /* ======================================================================
- * DS18B20/DS1820, 1-Wire on PD4
+ * DS18B20/DS1820, 1-Wire on PB1
+ *
+ * The original Ex7 wiring puts this on PD4, but PD4 doubles as one of
+ * the LCD's 4-bit data lines (see the LCD section above) -- every
+ * 1-Wire operation here toggles PD4 between input/output, and leaves
+ * it as an input when done, which corrupts LCD output the moment a
+ * program (like lib/examples/7.2.c or 8.2.c) uses both at once. PB1
+ * isn't used by anything else this library touches, so it sidesteps
+ * the conflict entirely instead of fighting over the pin in software.
  * ====================================================================== */
 
-#define THERM_PORT PORTD
-#define THERM_DDR  DDRD
-#define THERM_PIN  PIND
-#define THERM_DQ   PD4
+#define THERM_PORT PORTB
+#define THERM_DDR  DDRB
+#define THERM_PIN  PINB
+#define THERM_DQ   PB1
 
 #define THERM_INPUT_MODE()  (THERM_DDR &= (uint8_t) ~(1 << THERM_DQ))
 #define THERM_OUTPUT_MODE() (THERM_DDR |= (1 << THERM_DQ))
@@ -427,7 +435,19 @@ unsigned char *usart_receive_str(unsigned char *buffer, uint8_t maxlen) {
     uint8_t i = 0;
     unsigned char c;
     do {
-        c = usart_receive();
+        /* usart_receive() itself blocks forever -- poll RXC0 here
+         * instead, with a ~3s timeout, so a device that never answers
+         * (unplugged, unpowered, wrong wiring) gives up instead of
+         * hanging the whole program with no feedback. */
+        uint16_t waited_ms = 0;
+        while (!(UCSR0A & (1 << RXC0))) {
+            _delay_ms(1);
+            if (++waited_ms >= 3000) {
+                buffer[0] = '\0'; /* no reply arrived in time */
+                return buffer;
+            }
+        }
+        c = UDR0;
         if (i < maxlen - 1)
             buffer[i++] = c;
     } while (c != '\n');

@@ -38,7 +38,8 @@ int main(void) {
                       reply, sizeof reply);
 
         uint16_t raw = therm_read_temperature();
-        int16_t temp_tenths = (int16_t)(((int32_t) raw * 10) >> 4) + 120;
+        /* +9.0C offset, tuned for ~27C room temperature -- see 8.2.c. */
+        int16_t temp_tenths = (int16_t)(((int32_t) raw * 10) >> 4) + 90;
         uint8_t pressure_raw = adc_read8();
         uint16_t pressure_tenths = (uint16_t)(((uint32_t) pressure_raw * 200) / 255);
 
