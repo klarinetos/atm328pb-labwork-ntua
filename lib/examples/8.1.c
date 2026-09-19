@@ -12,8 +12,11 @@ static void step(uint8_t n, const unsigned char *command) {
     lcd_clear_display();
     lcd_data((uint8_t)('0' + n));
     lcd_data('.');
-    lcd_string(reply[0] == 'S' ? (const unsigned char *) "Success"
-                                : (const unsigned char *) "Fail");
+    if (reply[0] == '\0') /* usart_receive_str() timed out -- nothing answered */
+        lcd_string((const unsigned char *) "TIMEOUT");
+    else
+        lcd_string(reply[0] == 'S' ? (const unsigned char *) "Success"
+                                    : (const unsigned char *) "Fail");
     _delay_ms(2000);
 }
 
