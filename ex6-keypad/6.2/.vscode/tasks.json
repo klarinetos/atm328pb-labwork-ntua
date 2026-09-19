@@ -2,6 +2,16 @@
     "version": "2.0.0",
     "tasks": [
         {
+            "label": "mkdir: ensure out/ exists",
+            "type": "shell",
+            "command": "if not exist \"${workspaceFolder}\\out\" mkdir \"${workspaceFolder}\\out\"",
+            "presentation": {
+                "reveal": "silent",
+                "panel": "shared"
+            },
+            "problemMatcher": []
+        },
+        {
             "label": "avr-gcc: compile main.c",
             "type": "shell",
             "command": "\"C:\\Program Files (x86)\\Microchip\\xc8\\v2.10\\avr\\bin\\avr-gcc.exe\"",
@@ -21,7 +31,8 @@
                 "-gdwarf-3",
                 "-mno-const-data-in-progmem",
                 "\"${workspaceFolder}\\main.c\"",
-                "-o", "\"${workspaceFolder}\\out\\main.elf\""
+                "-o",
+                "\"${workspaceFolder}\\out\\main.elf\""
             ],
             "presentation": {
                 "reveal": "always",
@@ -30,7 +41,9 @@
             },
             "problemMatcher": {
                 "owner": "avr-gcc",
-                "fileLocation": ["absolute"],
+                "fileLocation": [
+                    "absolute"
+                ],
                 "pattern": {
                     "regexp": "^(.*):(\\d+):(\\d+): (warning|error): (.*)$",
                     "file": 1,
@@ -39,18 +52,25 @@
                     "severity": 4,
                     "message": 5
                 }
-            }
+            },
+            "dependsOn": [
+                "mkdir: ensure out/ exists"
+            ],
+            "dependsOrder": "sequence"
         },
         {
             "label": "avr-objcopy: build main.hex",
             "type": "shell",
             "command": "\"C:\\Program Files (x86)\\Microchip\\xc8\\v2.10\\avr\\bin\\avr-objcopy.exe\"",
             "args": [
-                "-O", "ihex",
+                "-O",
+                "ihex",
                 "\"${workspaceFolder}\\out\\main.elf\"",
                 "\"${workspaceFolder}\\out\\main.hex\""
             ],
-            "dependsOn": ["avr-gcc: compile main.c"],
+            "dependsOn": [
+                "avr-gcc: compile main.c"
+            ],
             "dependsOrder": "sequence",
             "group": {
                 "kind": "build",
@@ -68,11 +88,16 @@
             "type": "shell",
             "command": "avrdude",
             "args": [
-                "-c", "xplainedmini_isp",
-                "-p", "m328pb",
-                "-U", "flash:w:${workspaceFolder}\\out\\main.hex:i"
+                "-c",
+                "xplainedmini_isp",
+                "-p",
+                "m328pb",
+                "-U",
+                "flash:w:${workspaceFolder}\\out\\main.hex:i"
             ],
-            "dependsOn": ["avr-objcopy: build main.hex"],
+            "dependsOn": [
+                "avr-objcopy: build main.hex"
+            ],
             "group": "test",
             "presentation": {
                 "reveal": "always",

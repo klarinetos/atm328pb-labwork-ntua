@@ -19,6 +19,7 @@ all: build
 build: $(HEX)
 
 $(HEX): main.asm
+	if not exist "$(OUT)" mkdir "$(OUT)"
 	"$(AVRASM2)" -fI -o "$(OUT)/main.hex" -l "$(OUT)/main.lst" -m "$(OUT)/main.map" -I "$(AVRASM2_INC)" main.asm
 
 load: build

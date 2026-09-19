@@ -72,7 +72,11 @@ nothing repo-wide to keep in sync.
 ## Building
 
 `Ctrl+Shift+B` inside a project folder runs its default build task, which
-writes into that project's own `out/`.
+writes into that project's own `out/`. Since `out/` is gitignored, every
+Makefile and `tasks.json` creates it first (`if not exist "out" mkdir
+"out"`) if it doesn't already exist — without that step, a fresh clone's
+first build fails with "Cannot open output file out/main.hex" (or
+equivalent) since nothing else ever creates the directory.
 
 **Assembly projects** (`main.asm`) — one task, `avrasm2`:
 

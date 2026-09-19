@@ -2,15 +2,29 @@
     "version": "2.0.0",
     "tasks": [
         {
+            "label": "mkdir: ensure out/ exists",
+            "type": "shell",
+            "command": "if not exist \"${workspaceFolder}\\out\" mkdir \"${workspaceFolder}\\out\"",
+            "presentation": {
+                "reveal": "silent",
+                "panel": "shared"
+            },
+            "problemMatcher": []
+        },
+        {
             "label": "avrasm2: build main.asm",
             "type": "shell",
             "command": "\"C:\\Program Files (x86)\\Microchip\\xc8\\v2.10\\avr\\bin\\avrasm2.exe\"",
             "args": [
                 "-fI",
-                "-o", "\"${workspaceFolder}\\out\\main.hex\"",
-                "-l", "\"${workspaceFolder}\\out\\main.lst\"",
-                "-m", "\"${workspaceFolder}\\out\\main.map\"",
-                "-I", "\"C:\\Program Files (x86)\\Microchip\\xc8\\v2.10\\dfp\\avrasm\\inc\"",
+                "-o",
+                "\"${workspaceFolder}\\out\\main.hex\"",
+                "-l",
+                "\"${workspaceFolder}\\out\\main.lst\"",
+                "-m",
+                "\"${workspaceFolder}\\out\\main.map\"",
+                "-I",
+                "\"C:\\Program Files (x86)\\Microchip\\xc8\\v2.10\\dfp\\avrasm\\inc\"",
                 "\"${workspaceFolder}\\main.asm\""
             ],
             "group": {
@@ -24,7 +38,9 @@
             },
             "problemMatcher": {
                 "owner": "avrasm2",
-                "fileLocation": ["absolute"],
+                "fileLocation": [
+                    "absolute"
+                ],
                 "pattern": {
                     "regexp": "^(.*)\\((\\d+)\\): (error|warning): (.*)$",
                     "file": 1,
@@ -32,18 +48,27 @@
                     "severity": 3,
                     "message": 4
                 }
-            }
+            },
+            "dependsOn": [
+                "mkdir: ensure out/ exists"
+            ],
+            "dependsOrder": "sequence"
         },
         {
             "label": "avrdude: flash to ATmega328PB Xplained Mini",
             "type": "shell",
             "command": "avrdude",
             "args": [
-                "-c", "xplainedmini_isp",
-                "-p", "m328pb",
-                "-U", "flash:w:${workspaceFolder}\\out\\main.hex:i"
+                "-c",
+                "xplainedmini_isp",
+                "-p",
+                "m328pb",
+                "-U",
+                "flash:w:${workspaceFolder}\\out\\main.hex:i"
             ],
-            "dependsOn": ["avrasm2: build main.asm"],
+            "dependsOn": [
+                "avrasm2: build main.asm"
+            ],
             "group": "test",
             "presentation": {
                 "reveal": "always",
